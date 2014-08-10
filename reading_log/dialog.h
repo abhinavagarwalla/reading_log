@@ -62,7 +62,23 @@ private:
     Ui::Dialog *ui;
     QTimer *timer;
 
-    void realtimeplot(int vl_prev,int vr_prev,int vl,int vr);
+    int vls_sent[NUMTICKS];
+    int vrs_sent[NUMTICKS];
+
+    int vls_recv[NUMTICKS];
+    int vrs_recv[NUMTICKS];
+
+    double bot_x[NUMTICKS];
+    double bot_y[NUMTICKS];
+    double bot_theta[NUMTICKS];
+
+
+    double ball_x[NUMTICKS];
+    double ball_y[NUMTICKS];
+    double ball_theta[NUMTICKS];
+
+
+    void realtimeplot(int vl_prev,int vr_prev,int vl,int vr,int idx);
 
     QwtPlotGrid *grid;
     QwtPlotCurve *curve;

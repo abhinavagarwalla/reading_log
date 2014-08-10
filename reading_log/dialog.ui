@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1154</width>
-    <height>595</height>
+    <height>554</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,7 +23,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -46,6 +46,7 @@
              <height>410</height>
             </size>
            </property>
+           <zorder></zorder>
           </widget>
          </item>
         </layout>
@@ -70,10 +71,10 @@
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="1">
-          <widget class="QPushButton" name="startButton">
+         <item row="0" column="3">
+          <widget class="QPushButton" name="resetButton">
            <property name="text">
-            <string>Start</string>
+            <string>Reset</string>
            </property>
           </widget>
          </item>
@@ -84,10 +85,10 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="3">
-          <widget class="QPushButton" name="resetButton">
+         <item row="0" column="1">
+          <widget class="QPushButton" name="startButton">
            <property name="text">
-            <string>Reset</string>
+            <string>Start</string>
            </property>
           </widget>
          </item>
