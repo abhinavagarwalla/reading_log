@@ -57,12 +57,31 @@ Dialog::Dialog(QWidget *parent) :
 
     fp = fopen("data.log","r");
     if(fp == NULL){exit(1);}
+
+
+    int index = 0;
+
+    while(!feof(fp)){
+
+        fscanf(fp,"%d %d ",&vrs_sent[index],&vls_sent[index]);
+        fscanf(fp,"%d %d ",&vrs_recv[index],&vls_recv[index]);
+
+        fscanf(fp,"%lf %lf %lf ",&bot_x[index],&bot_y[index],&bot_theta[index]);
+        fscanf(fp,"%lf %lf %lf ",&ball_x[index],&ball_y[index],&ball_theta[index]);
+
+        printf("%d %d %lf %lf %lf %lf %lf %lf",vrs_sent[index],vls_sent[index],bot_x[index],bot_y[index],bot_theta[index],
+               ball_x[index],ball_y[index],ball_theta[index]);
+
+        index++;
+
+    }
+
+    fclose(fp);
+   // file.close();
 }
 
 Dialog::~Dialog()
 {
-    fclose(fp);
-    file.close();
     delete ui;
 }
 
@@ -84,6 +103,9 @@ void Dialog::on_resetButton_clicked()
 
    ui->plot->QwtPlot::detachItems(QwtPlotItem::Rtti_PlotItem, true);
    ui->plot->replot();
+
+   ui->plot_vr->QwtPlot::detachItems(QwtPlotItem::Rtti_PlotItem, true);
+   ui->plot_vr->replot();
 }
 
 void Dialog::on_horizontalSlider_sliderMoved(int )
@@ -93,23 +115,12 @@ void Dialog::on_horizontalSlider_sliderMoved(int )
 
 void Dialog::onCurIdxChanged(int idx)
 {
-    double pos_x,pos_y,pos_theta;
-
-    fscanf(fp,"%lf %lf %lf ",&pos_x,&pos_y,&pos_theta);
-    qDebug() << "PosX: " << pos_x << " " << "PosY: " << pos_y << " " << "PosTheta: " << pos_theta;
-
-
-    Pose pos(pos_x,pos_y,pos_theta);
-
+    Pose pos(bot_x[idx],bot_y[idx],bot_theta[idx]);
     ui->renderArea->changePose(pos);
-
-    fscanf(fp,"%lf %lf %lf",&pos_x,&pos_y,&pos_theta); // this is taking in the ball pos
-
 }
 
-void Dialog::realtimeplot(int vl_prev,int vr_prev,int vl,int vr){
+void Dialog::realtimeplot(int vl_prev,int vr_prev,int vl,int vr,int idx){
 
-    static qreal time = 0;
     curve = new QwtPlotCurve();
     curve_vr = new QwtPlotCurve();
     curve->setTitle( "Some Points" );
@@ -132,11 +143,11 @@ void Dialog::realtimeplot(int vl_prev,int vr_prev,int vl,int vr){
     << QPointF( 2.0, 4.5 ) << QPointF( 3.0, 6.8 )
     << QPointF( 4.0, 7.9 ) << QPointF( 5.0, 7.1 );*/
 
-points << QPointF(time,vl_prev);
-points_vr << QPointF(time,vr_prev);
-time++;
-points << QPointF(time,vl);
-points_vr << QPointF(time,vr);
+points << QPointF(idx-1,vl_prev);
+points_vr << QPointF(idx-1,vr_prev);
+
+points << QPointF(idx,vl);
+points_vr << QPointF(idx,vr);
 
 curve->setData( points );
 curve_vr->setData( points_vr);
@@ -168,20 +179,7 @@ void Dialog::onTimeout()
     }
 
 
-    int vrs, vls;
-
-    fscanf(fp,"%d %d ",&vrs,&vls);
-    fscanf(fp,"%d %d ",&vrs,&vls);
-
-
-    qDebug() << "VLS: " << vls << " " << "VRS: " << vrs << " ";
-    static int vl_prev = 0;
-    static int vr_prev = 0;
-    realtimeplot(vl_prev,vr_prev,vls,vrs);
-
-    vl_prev = vls;
-    vr_prev = vrs;
-
+    realtimeplot(vls_sent[idx-1],vrs_sent[idx-1],vls_sent[idx],vrs_sent[idx],idx);
 
     ui->horizontalSlider->setValue(idx);
 }
