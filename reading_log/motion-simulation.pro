@@ -14,7 +14,7 @@ SOURCES += dialog.cpp main.cpp pose.cpp renderarea.cpp
 
 
 INCLUDEPATH += /usr/include/qwt-qt4/
-LIBS += -l qwt-qt4\
+LIBS += -lqwt-qt4\
         -lprotobuf
 LIBS += -lgsl -lgslcblas
 
